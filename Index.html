@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        
+        <script>
+            //#region plugin stuff
+            function calculateMidX(e) {
+                return e.outerWidth() / 2;
+            }
+
+            function calculateMidY(e) {
+                return e.outerHeight() / 2;
+            }
+
+
+            (function ($) {
+
+                $.fn.enableNumPadEntry = function (options) {
+                    var element = this;
+                    var oneButton = $('<button>').click(function(){element.val(element.val() + 1)}).append('1');
+                    var twoButton = $('<button>').click(function(){element.val(element.val() + 2)}).append('2');
+                    var numPadElementToBeAdded = $('<div>').addClass('num-pad').append(oneButton).append(twoButton);                    
+                    
+                    //TODO need to have the cs injected here as well
+                    $('body').append(numPadElementToBeAdded)
+
+                    numPadElementToBeAdded.css('left', calculateMidX($(element)) + $(element).position().left - (numPadElementToBeAdded.outerWidth() / 2))
+                }
+
+            }(jQuery))
+            //#endregion
+
+            $(window).on('load', function() {
+                $('#text-input-2').enableNumPadEntry();
+            });
+        </script>         
+        
+        <style>
+            .num-pad{
+                position: absolute;
+                border: 1px solid grey;
+                width: 100px;
+                height: 100px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <input type="text" id="text-input" placeholder="banana!">
+        <input type="text" id="text-input-2" placeholder="banana2!">
+    </body>
+</html>
