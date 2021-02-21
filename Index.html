@@ -13,19 +13,36 @@
                 return e.outerHeight() / 2;
             }
 
-
             (function ($) {
 
                 $.fn.enableNumPadEntry = function (options) {
                     var element = this;
-                    var oneButton = $('<button>').click(function(){element.val(element.val() + 1)}).append('1');
-                    var twoButton = $('<button>').click(function(){element.val(element.val() + 2)}).append('2');
-                    var numPadElementToBeAdded = $('<div>').addClass('num-pad').append(oneButton).append(twoButton);                    
+                    var numPadId = 'num-pad-' + $('.num-pad').length;
+                    // var oneButton = $('<button>').click(function(){element.val(element.val() + 1)}).append('1');
+                    // var twoButton = $('<button>').click(function(){element.val(element.val() + 2)}).append('2');
+                    var numPadElementToBeAdded = $('<div>').attr('id', numPadId).addClass('num-pad').append('num pad');//.append(oneButton).append(twoButton);
                     
-                    //TODO need to have the cs injected here as well
+                    //only add css if no numpad elements exist yet
+                    if($('.num-pad').length == 0){
+                        $("<style type='text/css'> .num-pad {" +
+                            "position: absolute;" +
+                            "border: 1px solid grey;" +
+                            "width: 100px;" +
+                            "height: 100px;" +
+                            //"display: none;" +
+                            "} </style>").appendTo('head');
+                    }
+
                     $('body').append(numPadElementToBeAdded)
 
+                    //position num pad element relative to the chosen element
+                    //TODO need to add spacing between num pad and the chosen element here
                     numPadElementToBeAdded.css('left', calculateMidX($(element)) + $(element).position().left - (numPadElementToBeAdded.outerWidth() / 2))
+                    
+                    //show num pad on chosen element focus only
+                    $(element)
+                        .focusin(function() {$('#' + numPadId).css('display', 'grid')})
+                        .focusout(function() {$('#' + numPadId).css('display', 'none')});
                 }
 
             }(jQuery))
@@ -34,16 +51,8 @@
             $(window).on('load', function() {
                 $('#text-input-2').enableNumPadEntry();
             });
-        </script>         
-        
-        <style>
-            .num-pad{
-                position: absolute;
-                border: 1px solid grey;
-                width: 100px;
-                height: 100px;
-            }
-        </style>
+        </script>
+
     </head>
 
     <body>
